@@ -1,0 +1,83 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="container mt-4">
+
+    <!-- Titre + Bouton -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Liste des Commandes</h2>
+        <a href="/commande/add" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nouvelle Commande
+        </a>
+    </div>
+
+    <!-- Liste -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+
+        {% if commandes|length > 0 %}
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Code</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Montant Total</th>
+                            <th class="text-center">Produits</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for commande in commandes %}
+                        <tr>
+                            <td class="text-center">
+                                CMD{{ commande.id }}
+                            </td>
+
+                            <td class="text-center">
+                                {{ commande.date|date("d/m/Y") }}
+                            </td>
+
+                            <td class="text-center">
+                                {{ commande.montant }} FCFA
+                            </td>
+
+                            <td>
+                                <ul class="mb-0">
+                                {% for achat in commande.achats %}
+                                    <li class="text-center">
+                                        {{ achat.produit.libelle }}
+                                        ({{ achat.qteAchete }} x {{ achat.prixUnitaire }})
+                                        = <strong>{{ achat.montant }}</strong>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            
+
+        {% else %}
+
+            <div class="text-center alert alert-danger">
+                Aucune commande enregistrée
+            </div>
+
+        {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

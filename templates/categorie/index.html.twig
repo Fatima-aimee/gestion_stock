@@ -1,0 +1,56 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Liste des Catégories</h2>
+        <a href="/categorie/add" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nouvelle Catégorie
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+
+        {% if categories|length > 0 %}
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Code</th>
+                            <th class="text-center">Libellé</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for categorie in categories %}
+                        <tr>
+                            <td class="text-center">
+                                CAT{{ categorie.id }}
+                            </td>
+                            <td class="text-center">
+                                {{ categorie.libelle }}
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+            <div class="alert alert-danger text-center">
+                Aucune catégorie enregistrée
+            </div>
+        {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

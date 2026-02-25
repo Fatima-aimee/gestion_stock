@@ -1,0 +1,76 @@
+{% extends "base.html.twig" %}
+
+{% block custumStylesheets %}
+<style>
+    .form-section { padding: 1rem 1.2rem; }
+    .form-label { font-weight: 600; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>{{ produit.id is defined ? 'Modifier Produit' : 'Ajouter Produit' }}</h3>
+        <a href="/produit" class="btn btn-secondary">Retour Liste</a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body form-section">
+
+            <form method="post">
+                <div class="row g-4">
+
+                    <!-- Libellé -->
+                    <div class="col-md-6">
+                        <label class="form-label">Libellé</label>
+                        <input type="text" name="libelle" placeholder="Libellé" 
+                               value="{{ produit.libelle|default('') }}" 
+                               class="form-control" required>
+                    </div>
+
+                    <!-- Prix -->
+                    <div class="col-md-6">
+                        <label class="form-label">Prix (€)</label>
+                        <input type="number" step="0.01" name="prix" placeholder="Prix" 
+                               value="{{ produit.prix|default('') }}" 
+                               class="form-control" required>
+                    </div>
+
+                    <!-- Quantité -->
+                    <div class="col-md-6">
+                        <label class="form-label">Quantité en stock</label>
+                        <input type="number" name="qteStock" placeholder="Quantité en stock" 
+                               value="{{ produit.qteStock|default('') }}" 
+                               class="form-control" required>
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div class="col-md-6">
+                        <label class="form-label">Catégorie</label>
+                        <select name="categorie" class="form-select" required>
+                            <option value="">-- Choisir catégorie --</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}" 
+                                    {% if produit.categorie is defined and produit.categorie.id == cat.id %}selected{% endif %}>
+                                    {{ cat.libelle }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Bouton -->
+                    <div class="col-md-12 mt-3 text-end">
+                        <button type="submit" class="btn btn-primary">
+                            {{ produit.id is defined ? 'Modifier' : 'Ajouter' }}
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

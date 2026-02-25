@@ -1,0 +1,110 @@
+{% extends "base.html.twig" %}
+
+{% block custumStylesheets %}
+<style>
+    .badge-stock { font-weight: 600; }
+    .card-section { padding: 1rem 1.2rem; }
+    .filter-btn { margin-right: 0.5rem; }
+</style>
+{% endblock %}
+
+{% block body %}
+{% set statutFilter = statutFilter|default('') %} {# valeur par défaut #}
+
+<div class="container mt-4">
+    <!-- Titre + Bouton -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Liste des Produits</h2>
+        <a href="/produit/add" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nouveau Produit
+        </a>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <form method="get">
+                <select name="statutFilter" class="form-select" onchange="this.form.submit()">
+                    <option value="">Tous les statuts</option>
+                    <option value="en-stock" {% if statutFilter == 'en-stock' %}selected{% endif %}>En Stock</option>
+                    <option value="stock-bas" {% if statutFilter == 'stock-bas' %}selected{% endif %}>Stock Bas</option>
+                    <option value="rupture" {% if statutFilter == 'rupture' %}selected{% endif %}>Rupture</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Catégorie</th>
+                <th>Stock</th>
+                <th>Prix</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits %}
+                {% set statut = produit.qteStock == 0 ? 'rupture' : (produit.qteStock <= 10 ? 'stock-bas' : 'en-stock') %}
+                {% if statutFilter == '' or statutFilter == statut %}
+                    <tr>
+                        <td>{{ produit.id }}</td>
+                        <td>{{ produit.libelle }}</td>
+                        <td>{{ produit.categorie.libelle }}</td>
+                        <td>{{ produit.qteStock }}</td>
+                        <td>{{ produit.prix }} FCFA</td>
+                        <td>
+                            {% if produit.qteStock == 0 %}
+                                <span class="badge bg-danger badge-stock">Rupture</span>
+                            {% elseif produit.qteStock <= 10 %}
+                                <span class="badge bg-warning text-dark badge-stock">Stock Bas</span>
+                            {% else %}
+                                <span class="badge bg-success badge-stock">En Stock</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="" class="btn btn-sm btn-primary">Éditer</a>
+                            <a href="" class="btn btn-sm btn-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    // Filtrage par statut
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const rows = document.querySelectorAll('#produitTable tbody tr');
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const filter = btn.getAttribute('data-filter');
+            rows.forEach(row => {
+                if(filter === 'all' || row.dataset.statut === filter){
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Recherche par nom / catégorie
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+        const term = searchInput.value.toLowerCase();
+        rows.forEach(row => {
+            const nom = row.children[1].textContent.toLowerCase();
+            const cat = row.children[2].textContent.toLowerCase();
+            row.style.display = (nom.includes(term) || cat.includes(term)) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}
+

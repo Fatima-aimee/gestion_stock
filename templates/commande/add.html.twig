@@ -1,0 +1,62 @@
+{% extends "base.html.twig" %}
+
+{% block custumStylesheets %}
+    <style>
+        .form-section {
+            padding: 1rem 1.2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Nouvelle Commande</h3>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body form-section">
+
+            <form method="post">
+                <div class="row g-4">
+
+                    {% for produit in produits %}
+                        <div class="col-md-6">
+                            <label class="form-label switch-wrapper">
+                                <input type="checkbox" 
+                                    name="produits[{{ loop.index }}][id]" 
+                                    value="{{ produit.id }}">
+                                {{ produit.libelle }} (Stock: {{ produit.qteStock }}) - Prix: {{ produit.prix }}
+                            </label>
+
+                            <input type="number" 
+                                name="produits[{{ loop.index }}][quantite]" 
+                                placeholder="Quantité" 
+                                class="form-control mt-1">
+                        </div>
+                    {% endfor %}
+
+                    <!-- Bouton de soumission -->
+                    <div class="col-md-12 mt-3 text-end">
+                        <button type="submit" class="btn btn-primary">Valider la commande</button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
