@@ -52,7 +52,7 @@ class CommandeController extends AbstractController
 
             $service->traiterCommande($commande);
 
-            return $this->redirectToRoute('list_produit');
+            return $this->redirectToRoute('list_commande');
         }
 
         return $this->render('commande/add.html.twig', [

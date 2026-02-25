@@ -76,35 +76,3 @@
 </div>
 {% endblock %}
 
-{% block javascripts %}
-<script>
-    // Filtrage par statut
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const rows = document.querySelectorAll('#produitTable tbody tr');
-
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const filter = btn.getAttribute('data-filter');
-            rows.forEach(row => {
-                if(filter === 'all' || row.dataset.statut === filter){
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // Recherche par nom / catégorie
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', () => {
-        const term = searchInput.value.toLowerCase();
-        rows.forEach(row => {
-            const nom = row.children[1].textContent.toLowerCase();
-            const cat = row.children[2].textContent.toLowerCase();
-            row.style.display = (nom.includes(term) || cat.includes(term)) ? '' : 'none';
-        });
-    });
-</script>
-{% endblock %}
-

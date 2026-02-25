@@ -13,14 +13,14 @@
     </div>
 
     <!-- Liste -->
-    <div class="card border-0 shadow-sm">
-        <div class="card-body">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-4">
 
         {% if commandes|length > 0 %}
 
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table align-middle table-hover">
+                    <thead class="table-light">
                         <tr>
                             <th class="text-center">Code</th>
                             <th class="text-center">Date</th>
@@ -46,16 +46,24 @@
                             </td>
 
                             <td>
-                                <ul class="mb-0">
-                                {% for achat in commande.achats %}
-                                    <li class="text-center">
-                                        {{ achat.produit.libelle }}
-                                        ({{ achat.qteAchete }} x {{ achat.prixUnitaire }})
-                                        = <strong>{{ achat.montant }}</strong>
-                                    </li>
-                                {% endfor %}
-                                </ul>
+                                <div class="d-flex flex-column gap-2">
+                                    {% for achat in commande.achats %}
+                                        <div class="d-flex justify-content-between align-items-center border rounded-3 p-2 bg-light">
 
+                                            <div>
+                                                <strong>{{ achat.produit.libelle }}</strong><br>
+                                                <small class="text-muted">
+                                                    {{ achat.qteAchete }} x {{ achat.prixUnitaire }} FCFA
+                                                </small>
+                                            </div>
+
+                                            <span class="badge bg-primary">
+                                                {{ achat.montant }} FCFA
+                                            </span>
+
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </td>
 
                         </tr>
