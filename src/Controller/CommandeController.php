@@ -45,6 +45,14 @@ class CommandeController extends AbstractController
                 $achat = new Achat();
                 $achat->setProduit($produit);
                 $achat->setQteAchete((int)$data['quantite']);
+                if ($data['quantite'] > $produit->getQteStock()) {
+                    $this->addFlash('error', "Quantité insuffisante pour le produit " . $produit->getLibelle());
+                    return $this->redirectToRoute('add_commande');
+                }
+                if ($data['quantite'] < 1) {
+                    $this->addFlash('danger', 'La quantité doit être supérieure à 0.');
+                    return $this->redirectToRoute('add_commande');
+                }
                 $achat->setPrixUnitaire($produit->getPrix());
 
                 $commande->addAchat($achat);
